@@ -1,24 +1,41 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
+import { ArrowRight, CheckCircle2, ChevronDown, CircleDollarSign, Clock3, Search, ShieldCheck, Sparkles, Star, Wrench } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { PublicHeader } from "@/components/localfix/public-header";
+import { Logo } from "@/components/localfix/logo";
+import { categories, professionals, repairPrompts } from "@/lib/localfix-data";
+import workbench from "@/assets/localfix-workbench.jpg";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({ meta: [
+    { title: "localFix — Know what to fix next" },
+    { name: "description", content: "Describe what is broken, get a clear repair assessment, follow a safe guide, or find a trusted local professional." },
+    { property: "og:title", content: "localFix — Know what to fix next" },
+    { property: "og:description", content: "From broken to a clear next step." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ]}), component: Home,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
+function Home() {
+  const [query, setQuery] = useState("");
+  const navigate = useNavigate();
+  const start = () => navigate({ to: "/diagnose", search: { q: query || undefined } });
+  return <div className="bg-background"><PublicHeader />
+    <section className="relative min-h-[760px] overflow-hidden pt-20 md:min-h-[820px]"><img src={workbench} alt="Technician carefully opening a laptop on a clean repair bench" width={1600} height={1008} className="absolute inset-0 h-full w-full object-cover object-center" /><div className="absolute inset-0 bg-hero-overlay" /><div className="relative mx-auto flex min-h-[680px] max-w-7xl items-center px-5 py-16 lg:px-8"><div className="max-w-2xl"><div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-background/85 px-3 py-1.5 text-xs font-bold text-primary backdrop-blur"><Sparkles className="size-3.5" />A clearer path to repair</div><h1 className="max-w-xl font-display text-5xl font-bold leading-[1.05] sm:text-6xl lg:text-7xl">Broken doesn’t have to mean replaced.</h1><p className="mt-6 max-w-lg text-lg leading-8 text-foreground/75">Show us what’s wrong. localFix helps you understand the problem, weigh the cost, and choose a safe next step.</p><div className="mt-8 max-w-xl rounded-lg border bg-background p-2 shadow-2xl"><form onSubmit={(event) => { event.preventDefault(); start(); }} className="flex flex-col gap-2 sm:flex-row"><div className="relative flex-1"><Search className="absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" /><Input value={query} onChange={(e) => setQuery(e.target.value)} className="h-14 border-0 pl-12 text-base shadow-none" placeholder="What’s broken?" aria-label="Describe what is broken" /></div><Button className="h-14 px-6" type="submit">Check my repair<ArrowRight /></Button></form></div><div className="mt-4 flex flex-wrap gap-2">{repairPrompts.slice(0,3).map((prompt) => <button key={prompt} onClick={() => { setQuery(prompt); }} className="text-xs font-semibold text-foreground/70 underline decoration-border underline-offset-4 hover:text-primary">{prompt}</button>)}</div></div></div></section>
+
+    <section className="border-y bg-background py-20"><div className="mx-auto max-w-7xl px-5 lg:px-8"><div className="mb-10 flex items-end justify-between gap-6"><div><p className="section-label">Find your starting point</p><h2 className="mt-3 font-display text-3xl font-bold sm:text-4xl">Repair almost anything.</h2></div><Button asChild variant="outline" className="hidden sm:inline-flex"><Link to="/diagnose">Browse all<ArrowRight /></Link></Button></div><div className="grid grid-cols-2 gap-px overflow-hidden rounded-lg border bg-border sm:grid-cols-3 lg:grid-cols-6">{categories.map(({name,icon:Icon,count}) => <Link key={name} to="/diagnose" search={{q:name}} className="group bg-background p-5 transition-colors hover:bg-primary/5"><Icon className="size-7 text-primary" /><p className="mt-8 font-display font-bold">{name}</p><p className="mt-1 text-xs text-muted-foreground">{count}</p></Link>)}</div></div></section>
+
+    <section className="bg-muted/35 py-24"><div className="mx-auto max-w-7xl px-5 lg:px-8"><div className="grid gap-16 lg:grid-cols-[.8fr_1.2fr]"><div><p className="section-label">One calm process</p><h2 className="mt-3 font-display text-4xl font-bold">From uncertainty to a plan.</h2><p className="mt-5 leading-7 text-muted-foreground">No endless forum threads. We ask only what matters, show our confidence, and separate estimates from facts.</p><Button asChild className="mt-8"><Link to="/diagnose">Start diagnosis<ArrowRight /></Link></Button></div><div className="space-y-0 border-l">{[["01","Describe it","Tell us the item, symptoms, and what happened."],["02","Assess it","See likely causes, effort, cost range, and safety guidance."],["03","Choose your path","Fix it with a guide, save it, or request a local professional."]].map(([n,t,d]) => <div key={n} className="grid grid-cols-[64px_1fr] border-b py-7 pl-5"><span className="font-mono text-sm text-primary">{n}</span><div><h3 className="font-display text-xl font-bold">{t}</h3><p className="mt-2 text-sm leading-6 text-muted-foreground">{d}</p></div></div>)}</div></div></div></section>
+
+    <section className="py-24"><div className="mx-auto max-w-7xl px-5 lg:px-8"><div className="mb-10 max-w-2xl"><p className="section-label">A useful answer</p><h2 className="mt-3 font-display text-4xl font-bold">Know what you’re deciding.</h2></div><div className="grid overflow-hidden rounded-lg border lg:grid-cols-[1.3fr_.7fr]"><div className="p-6 sm:p-10"><div className="flex items-start justify-between gap-5"><div><span className="status-badge">Assessment ready</span><h3 className="mt-5 font-display text-2xl font-bold">Laptop power delivery fault</h3><p className="mt-2 max-w-xl text-muted-foreground">Based on the symptoms provided, the charger or USB-C power path is more likely than a main-board failure.</p></div><span className="grid size-12 shrink-0 place-items-center rounded-md bg-primary/10 text-primary"><Wrench /></span></div><div className="mt-10 grid gap-5 sm:grid-cols-3"><Metric icon={Clock3} label="Estimated time" value="30–45 min"/><Metric icon={CircleDollarSign} label="Likely cost" value="$0–$65"/><Metric icon={ShieldCheck} label="Difficulty" value="Intermediate"/></div></div><div className="border-t bg-foreground p-6 text-background sm:p-10 lg:border-l lg:border-t-0"><p className="text-xs font-bold uppercase text-primary-foreground/60">Recommended next step</p><h3 className="mt-4 font-display text-2xl font-bold">Test the charger before opening the case.</h3><ul className="mt-6 space-y-3 text-sm text-primary-foreground/75">{["No specialist tools required","Your data stays untouched","Stop if the battery is swollen"].map(x => <li key={x} className="flex gap-2"><CheckCircle2 className="size-4 shrink-0 text-warning" />{x}</li>)}</ul><Button asChild className="mt-8 bg-background text-foreground hover:bg-background/90"><Link to="/assessment">View sample assessment<ArrowRight /></Link></Button></div></div></div></section>
+
+    <section className="bg-foreground py-24 text-background"><div className="mx-auto max-w-7xl px-5 lg:px-8"><div className="grid gap-12 lg:grid-cols-[.8fr_1.2fr]"><div><p className="text-xs font-bold uppercase text-warning">When it needs an expert</p><h2 className="mt-3 font-display text-4xl font-bold">A trusted repairer is part of the plan.</h2><p className="mt-5 leading-7 text-primary-foreground/65">Share your assessment once, compare specialists, and request a quote without starting over.</p><Button asChild className="mt-8 bg-background text-foreground hover:bg-background/90"><Link to="/professionals">Find a local pro<ArrowRight /></Link></Button></div><div className="grid gap-3 sm:grid-cols-3">{professionals.map((pro) => <div key={pro.id} className="rounded-lg border border-primary-foreground/15 bg-primary-foreground/5 p-5"><span className="grid size-11 place-items-center rounded-full bg-primary font-bold text-primary-foreground">{pro.initials}</span><h3 className="mt-8 font-display font-bold">{pro.name}</h3><p className="text-sm text-primary-foreground/60">{pro.business}</p><div className="mt-4 flex items-center gap-1 text-sm"><Star className="size-4 fill-warning text-warning" />{pro.rating}<span className="text-primary-foreground/50">({pro.reviews})</span></div></div>)}</div></div></div></section>
+
+    <section className="py-24"><div className="mx-auto max-w-4xl px-5 lg:px-8"><p className="section-label">Common questions</p><h2 className="mt-3 font-display text-4xl font-bold">Repair, explained plainly.</h2><div className="mt-10 divide-y border-y">{[["Is the diagnosis guaranteed?","No. localFix presents likely causes and confidence based on what you share, then tells you when more information or a professional is needed."],["Will localFix tell me when a repair is unsafe?","Yes. Electrical, gas, structural, swollen-battery, and other hazardous scenarios are clearly escalated."],["Can I save my progress?","Yes. Sign in to save answers, photos, assessments, and guide progress across devices."]].map(([q,a]) => <details key={q} className="group py-5"><summary className="flex cursor-pointer list-none items-center justify-between font-display font-bold">{q}<ChevronDown className="size-5 transition-transform group-open:rotate-180" /></summary><p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">{a}</p></details>)}</div></div></section>
+    <footer className="border-t py-10"><div className="mx-auto flex max-w-7xl flex-col gap-6 px-5 sm:flex-row sm:items-center sm:justify-between lg:px-8"><Logo/><p className="text-sm text-muted-foreground">Repair guidance with uncertainty, safety, and people in the loop.</p><div className="flex gap-5 text-sm font-semibold"><Link to="/guide">Guides</Link><Link to="/professionals">Professionals</Link><Link to="/auth">Sign in</Link></div></div></footer>
+  </div>;
 }
+function Metric({icon:Icon,label,value}:{icon:typeof Clock3;label:string;value:string}) { return <div><Icon className="size-5 text-primary"/><p className="mt-3 text-xs text-muted-foreground">{label}</p><p className="mt-1 font-display font-bold">{value}</p></div> }
