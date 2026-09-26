@@ -11,8 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AssessmentRouteImport } from './routes/assessment'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as DiagnoseRouteImport } from './routes/diagnose'
 import { Route as GuideRouteImport } from './routes/guide'
+import { Route as ProRouteImport } from './routes/pro'
+import { Route as ProfessionalsRouteImport } from './routes/professionals'
+import { Route as RepairsRouteImport } from './routes/repairs'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,6 +26,11 @@ const IndexRoute = IndexRouteImport.update({
 const AssessmentRoute = AssessmentRouteImport.update({
   id: '/assessment',
   path: '/assessment',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DiagnoseRoute = DiagnoseRouteImport.update({
@@ -34,39 +43,95 @@ const GuideRoute = GuideRouteImport.update({
   path: '/guide',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProRoute = ProRouteImport.update({
+  id: '/pro',
+  path: '/pro',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfessionalsRoute = ProfessionalsRouteImport.update({
+  id: '/professionals',
+  path: '/professionals',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RepairsRoute = RepairsRouteImport.update({
+  id: '/repairs',
+  path: '/repairs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/assessment': typeof AssessmentRoute
+  '/dashboard': typeof DashboardRoute
   '/diagnose': typeof DiagnoseRoute
   '/guide': typeof GuideRoute
+  '/pro': typeof ProRoute
+  '/professionals': typeof ProfessionalsRoute
+  '/repairs': typeof RepairsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/assessment': typeof AssessmentRoute
+  '/dashboard': typeof DashboardRoute
   '/diagnose': typeof DiagnoseRoute
   '/guide': typeof GuideRoute
+  '/pro': typeof ProRoute
+  '/professionals': typeof ProfessionalsRoute
+  '/repairs': typeof RepairsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/assessment': typeof AssessmentRoute
+  '/dashboard': typeof DashboardRoute
   '/diagnose': typeof DiagnoseRoute
   '/guide': typeof GuideRoute
+  '/pro': typeof ProRoute
+  '/professionals': typeof ProfessionalsRoute
+  '/repairs': typeof RepairsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/assessment' | '/diagnose' | '/guide'
+  fullPaths:
+    | '/'
+    | '/assessment'
+    | '/dashboard'
+    | '/diagnose'
+    | '/guide'
+    | '/pro'
+    | '/professionals'
+    | '/repairs'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/assessment' | '/diagnose' | '/guide'
-  id: '__root__' | '/' | '/assessment' | '/diagnose' | '/guide'
+  to:
+    | '/'
+    | '/assessment'
+    | '/dashboard'
+    | '/diagnose'
+    | '/guide'
+    | '/pro'
+    | '/professionals'
+    | '/repairs'
+  id:
+    | '__root__'
+    | '/'
+    | '/assessment'
+    | '/dashboard'
+    | '/diagnose'
+    | '/guide'
+    | '/pro'
+    | '/professionals'
+    | '/repairs'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AssessmentRoute: typeof AssessmentRoute
+  DashboardRoute: typeof DashboardRoute
   DiagnoseRoute: typeof DiagnoseRoute
   GuideRoute: typeof GuideRoute
+  ProRoute: typeof ProRoute
+  ProfessionalsRoute: typeof ProfessionalsRoute
+  RepairsRoute: typeof RepairsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -85,6 +150,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AssessmentRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/diagnose': {
       id: '/diagnose'
       path: '/diagnose'
@@ -99,14 +171,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GuideRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pro': {
+      id: '/pro'
+      path: '/pro'
+      fullPath: '/pro'
+      preLoaderRoute: typeof ProRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/professionals': {
+      id: '/professionals'
+      path: '/professionals'
+      fullPath: '/professionals'
+      preLoaderRoute: typeof ProfessionalsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/repairs': {
+      id: '/repairs'
+      path: '/repairs'
+      fullPath: '/repairs'
+      preLoaderRoute: typeof RepairsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AssessmentRoute: AssessmentRoute,
+  DashboardRoute: DashboardRoute,
   DiagnoseRoute: DiagnoseRoute,
   GuideRoute: GuideRoute,
+  ProRoute: ProRoute,
+  ProfessionalsRoute: ProfessionalsRoute,
+  RepairsRoute: RepairsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

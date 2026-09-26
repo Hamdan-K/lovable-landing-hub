@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Use public SSR routes for the localFix MVP screens and progressively enhance saved user data through Lovable Cloud; this keeps the demo journey immediately explorable while preserving a scalable account-backed model.
