@@ -8,6 +8,13 @@
       "when": 1790445323154,
       "tag": "0000_create_localfix_core",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790445357368,
+      "tag": "0001_secure_repair_photo_storage",
+      "breakpoints": true
     }
   ]
 }
